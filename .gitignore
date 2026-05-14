@@ -12,10 +12,11 @@ __pycache__/
 .vscode/
 .idea/
 
-# Dados temporários
+# Dados temporários e sensíveis (clientes/financeiro)
 dados/raw/
 dados/cache/
 dados/csv/
+dados/octadesk/
 *.log
 
 # Sistema operacional

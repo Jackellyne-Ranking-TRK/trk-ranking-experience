@@ -246,6 +246,44 @@ Configure cada uma:
 
 ---
 
+## Rotina mensal — Atualizar arquivos externos
+
+Antes de rodar a edição mensal (ou sempre que quiser um snapshot novo do painel), baixar manualmente os arquivos do Octadesk e do sistema Imobiliar para as pastas locais. O pipeline lê esses arquivos diretamente — não consulta API.
+
+### Octadesk → pasta `dados/octadesk/`
+
+Baixar os 3 relatórios mais recentes do dashboard Octadesk e salvar com nomes em formato `Nome-AAAAMMDD-HHMM.xlsx` (o pipeline pega sempre o mais recente em ordem alfabética):
+
+| Arquivo | Origem no Octadesk |
+|---|---|
+| `Total_de_conversas-AAAAMMDD-HHMM.xlsx` | Relatórios → Conversas WhatsApp |
+| `Tickets_totais-AAAAMMDD-HHMM.xlsx` | Relatórios → Tickets |
+| `Avaliacoes-TICKET-AAAAMMDD-HHMM.xlsx` | Relatórios → Avaliações de Ticket |
+
+Se a pasta estiver vazia, o pipeline ignora WhatsApp/Tickets (indicadores ficam zerados, mas o painel continua funcionando).
+
+### Imobiliar → pasta `dados/csv/`
+
+Exportar os 3 relatórios do sistema Imobiliar (encoding latin-1, separador `;`):
+
+| Arquivo | Uso |
+|---|---|
+| `Relatorio_de_Boletos_Quitados.csv` | Bônus Inadimplência (Vivianne) |
+| `Relatorio_De_proprietarios.csv` | Cruzamento por proprietário |
+| `Relatorio_de_Imoveis.csv` | Cruzamento por IM |
+
+Se faltar qualquer um dos 3, o bônus Inadimplência sai como N=0.
+
+### Segurança
+
+Ambas as pastas são **gitignored** — nunca commitar dados de cliente/financeiro.
+
+### Quando a API entrar
+
+Cada um dos `pipeline/extract_octadesk.py` e `pipeline/extract_imobiliar.py` pode ser substituído por um leitor de API sem mexer em mais nenhum arquivo do pipeline. A interface (dict de DataFrames) permanece a mesma.
+
+---
+
 ## Configurações de email
 
 Para receber os emails:

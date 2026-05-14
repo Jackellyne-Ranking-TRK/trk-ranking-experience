@@ -1,0 +1,17 @@
+{
+  "edicao_11": {
+    "N": 61,
+    "denominador_R1": 138,
+    "taxa": 0.442,
+    "regra_aplicada": "R1 (multa ≤15%) + R2 (card.criado ≤ data_pag) + R3 (data_pag ≤ data_repasse)",
+    "data_calculo": "2026-05-14",
+    "antes_count": 61,
+    "sem_card_count": 55,
+    "reativos_count": 7,
+    "depois_count": 15,
+    "excluidos_rescisao_count": 4,
+    "excluidos_valor0_count": 0,
+    "multiplos_count": 7,
+    "_aviso_drift_vs_baseline": "Drift de -63 vs baseline 10ª (N=124) é INTENCIONAL. A 10ª Edição usava regra mais permissiva (sem checar temporalidade do card). A regra correta foi confirmada pela gestora em 14/05/2026: bônus só conta se Vivianne abriu card ANTES ou NO MESMO DIA do pagamento, excluindo casos onde card foi criado dias/semanas depois (cobrança reativa, não proativa)."
+  }
+}

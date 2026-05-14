@@ -109,7 +109,15 @@ def _calc_pessoa(pessoa: str, dfs: dict, ref: pd.Timestamp) -> dict:
 
 
 def _match_name(baseline_name: str, computed: list[dict]) -> Optional[dict]:
-    """Tenta achar o indicador computado equivalente ao do baseline."""
+    """Tenta achar o indicador computado equivalente ao do baseline.
+
+    Indicadores marcados com ★ são metadados de reporting do bônus (Fórmula A do manual v4:
+    nota = (score_base + N) / (peso_base + N) × 10). N é aplicado dentro de `nota_processo`
+    via `bonus_n`; não há um indicador ranqueado item-a-item correspondente em `calculate.py`.
+    Portanto não tentamos casar — retornamos None para sinalizar tratamento especial.
+    """
+    if "★" in baseline_name:
+        return None
     # tenta match exato primeiro
     for c in computed:
         if c["nome"] == baseline_name:
@@ -150,6 +158,11 @@ def validar(ref: pd.Timestamp, verbose: bool = True) -> dict:
                 diff_indicadores.append({"nome": ib["nome"], "status": "SKIP-Octadesk",
                                           "ok_b": ib["ok"], "tot_b": ib["tot"]})
                 continue
+            if "★" in ib["nome"]:
+                # Bônus aplicado via fórmula A em nota_processo — não é um indicador ranqueado.
+                diff_indicadores.append({"nome": ib["nome"], "status": "BONUS-via-formula",
+                                          "ok_b": ib["ok"], "tot_b": ib["tot"]})
+                continue
             ic = _match_name(ib["nome"], computed["indicadores"])
             if ic is None:
                 diff_indicadores.append({"nome": ib["nome"], "status": "MISS",
@@ -178,6 +191,8 @@ def validar(ref: pd.Timestamp, verbose: bool = True) -> dict:
                     print(f"  [OK ] {d['nome']:45}  {d['ok']:>4}/{d['tot']:>4}  (vs {d['ok_b']:>4}/{d['tot_b']:>4})")
                 elif d["status"] == "SKIP-Octadesk":
                     print(f"  [SKIP] {d['nome']:45}  (baseline {d['ok_b']:>4}/{d['tot_b']:>4})")
+                elif d["status"] == "BONUS-via-formula":
+                    print(f"  [BONUS] {d['nome']:45}  N={d['ok_b']:>4} (aplicado via fórmula A em nota_processo)")
                 elif d["status"] == "MISS":
                     print(f"  [MISS] {d['nome']:45}  (baseline {d['ok_b']:>4}/{d['tot_b']:>4})")
                 else:

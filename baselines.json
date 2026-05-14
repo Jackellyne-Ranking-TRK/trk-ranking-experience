@@ -97,6 +97,7 @@
         "Vistorias": 7.778
       },
       "_aviso": "Este painel da 10ª Edição registra apenas 2 indicadores do Marinho. O manual v4 prevê 3 (Laudo + Produtividade m²/h + Contestações). O indicador de Produtividade (peso 6, meta ≥32 m²/h) está AUSENTE no baseline. Validar com o usuário antes de tratar como verdade absoluta.",
+      "_aviso_drift_modelo": "OFFs persistentes vs baseline 10ª (Laudo denom 36 vs 46) são DRIFT DE MODELO CONHECIDO, não bug. A 10ª Ed aplicava uma exclusão implícita (não documentada no manual) que removia ~10 vistorias com laudo >7d úteis — mistura de reaberturas (conferência de reparo) e cards parados em 'Em produção' por meses. A 11ª Ed decidiu (Diego Kim, 2026-05-14) NÃO replicar essa exclusão: card parado em 'Em produção' depois do laudo entregue conta como atraso operacional, a métrica é educativa (força disciplina de uso do Pipefy). Esperar Δtot ≈ +10 cards e nota ligeiramente inferior à 10ª Ed.",
       "indicadores": [
         { "nome": "Laudos entregues ≤24h após vistoria", "ok": 28, "tot": 36, "pct": 77.8, "peso": 10 },
         { "nome": "Contestações respondidas <24h",       "ok": 4,  "tot": 23, "pct": 17.4, "peso": 10 }
@@ -184,8 +185,8 @@
   "deltas_vs_baseline_9": {
     "caio":     { "ant": 5.54, "atual": 5.48, "delta": -0.06 },
     "vivianne": { "ant": 5.26, "atual": 5.22, "delta": -0.04 },
-    "marinho":  { "ant": 2.73, "atual": 4.76, "delta": +2.03, "obs": "Salto grande — verificar se metodologia mudou ou se realmente houve melhora" },
-    "natalia":  { "ant": 3.89, "atual": 3.98, "delta": +0.09 },
-    "gardenia": { "ant": 3.91, "atual": 3.97, "delta": +0.06 }
+    "marinho":  { "ant": 2.73, "atual": 4.76, "delta": 2.03, "obs": "Salto grande — verificar se metodologia mudou ou se realmente houve melhora" },
+    "natalia":  { "ant": 3.89, "atual": 3.98, "delta": 0.09 },
+    "gardenia": { "ant": 3.91, "atual": 3.97, "delta": 0.06 }
   }
 }

@@ -474,15 +474,147 @@ def calc_caio_renovacao(df_renov: pd.DataFrame,
     return {"nota": nota_processo([ind7]), "indicadores": [ind7]}
 
 
+# ─────────────────────────────────────────────────────────────────────
+# OCTADESK — helpers compartilhados (WhatsApp + Tickets)
+# ─────────────────────────────────────────────────────────────────────
+
+WA_POS = {"Satisfeito", "Muito satisfeito"}
+WA_EXC = {"Não respondeu", "Não enviado"}
+TKT_AVAL_POS = {"Bom", "Bom com comentário"}
+TKT_AVAL_EXC = {"Não respondeu", "Não enviado"}
+
+COL_WA_RESP   = "Responsável da conversa"
+COL_WA_TEMPO  = "Tempo de espera após atribuição"
+COL_WA_SAT    = "Pesquisa de satisfação"
+
+COL_TKT_CAT    = "Categoria de assunto do ticket"
+COL_TKT_STATUS = "Status do ticket"
+COL_TKT_ASSUNTO = "Assunto do ticket"
+COL_TKT_RESP   = "Responsável do ticket"
+COL_TKT_IN     = "Data de entrada"
+COL_TKT_RESP_T = "Data da primeira resposta"
+COL_AVAL_RESP  = "Responsável do ticket"
+COL_AVAL_TIPO  = "Tipo de avaliação"
+
+
+def _parse_hms(s) -> Optional[float]:
+    """'H:MM:SS' → minutos (float). None se inválido/NaN."""
+    if not isinstance(s, str):
+        return None
+    parts = s.split(":")
+    if len(parts) != 3:
+        return None
+    try:
+        h, m, ss = int(parts[0]), int(parts[1]), int(parts[2])
+        return h * 60 + m + ss / 60.0
+    except ValueError:
+        return None
+
+
+def _match_nome(serie: pd.Series, nome) -> pd.Series:
+    """
+    Mask booleana de match EXATO (case-insensitive), aceitando str ou lista de variantes.
+
+    Match exato evita falsos positivos quando o sistema externo (Octadesk) tem
+    homônimos parciais — por exemplo, "Caio Rodrigues" não deve casar com algum
+    futuro "Caio Silva". Para Vivianne, a lista contempla "Vivianne Fontes" e
+    "VIVIANNE FONTES" (variantes confirmadas em snapshots históricos).
+    """
+    s = serie.astype(str).str.strip().str.upper()
+    if isinstance(nome, list):
+        targets = {n.strip().upper() for n in nome}
+        return s.isin(targets)
+    return s == nome.strip().upper()
+
+
+def _whatsapp_indicadores(df_conv: pd.DataFrame, nome_responsavel,
+                           peso_resposta: int = 4, peso_aval: int = 3) -> list[dict]:
+    """Retorna 2 indicadores de WhatsApp para um responsável."""
+    if df_conv is None or len(df_conv) == 0 or COL_WA_RESP not in df_conv.columns:
+        return []
+    df = df_conv[_match_nome(df_conv[COL_WA_RESP], nome_responsavel)].copy()
+
+    # Ind 1: Resposta ≤5min
+    tempo_min = df[COL_WA_TEMPO].apply(_parse_hms) if COL_WA_TEMPO in df.columns else pd.Series(dtype=float)
+    val = tempo_min.dropna()
+    ok1 = int((val <= 5).sum())
+    ind1 = score_indicador(ok1, len(val), peso_resposta)
+    ind1["nome"] = "WhatsApp — Resposta ≤5min"
+
+    # Ind 2: Avaliações positivas
+    if COL_WA_SAT in df.columns:
+        sat = df[COL_WA_SAT].astype(str)
+        denom = sat[~sat.isin(WA_EXC) & sat.notna() & (sat != "nan")]
+        ok2 = int(denom.isin(WA_POS).sum())
+    else:
+        ok2, denom = 0, []
+    ind2 = score_indicador(ok2, len(denom), peso_aval)
+    ind2["nome"] = "WhatsApp — Avaliações positivas"
+
+    return [ind1, ind2]
+
+
+def _tickets_filtrados(df_tickets: pd.DataFrame, nome_responsavel) -> pd.DataFrame:
+    """Aplica exclusões obrigatórias (manual §3.8) + filtro por responsável."""
+    if df_tickets is None or len(df_tickets) == 0:
+        return df_tickets if df_tickets is not None else pd.DataFrame()
+    df = df_tickets.copy()
+    # Exclusões
+    if COL_TKT_CAT in df.columns:
+        df = df[df[COL_TKT_CAT].astype(str) != "Cancelado / Spam"]
+    if COL_TKT_STATUS in df.columns:
+        df = df[df[COL_TKT_STATUS].astype(str) != "Cancelado"]
+    if COL_TKT_ASSUNTO in df.columns:
+        df = df[df[COL_TKT_ASSUNTO].astype(str).str.lower() != "tarefa"]
+    # Filtro responsável
+    if COL_TKT_RESP in df.columns:
+        df = df[_match_nome(df[COL_TKT_RESP], nome_responsavel)]
+    else:
+        df = df.iloc[0:0]
+    return df.copy()
+
+
+def _ticket_sla_ind(df_filtrado: pd.DataFrame, peso: int) -> dict:
+    """SLA ≤4h úteis (Data de entrada → Data da primeira resposta)."""
+    if len(df_filtrado) == 0 or COL_TKT_IN not in df_filtrado.columns or COL_TKT_RESP_T not in df_filtrado.columns:
+        ind = score_indicador(0, 0, peso)
+    else:
+        sub = df_filtrado.dropna(subset=[COL_TKT_IN, COL_TKT_RESP_T]).copy()
+        h = sub.apply(lambda r: horas_uteis(r[COL_TKT_IN], r[COL_TKT_RESP_T]), axis=1) if len(sub) else pd.Series(dtype=float)
+        ok = int((h <= 4).sum()) if len(sub) else 0
+        ind = score_indicador(ok, len(sub), peso)
+    ind["nome"] = "Tickets — SLA <4h úteis"
+    return ind
+
+
+def _ticket_aval_ind(df_aval: pd.DataFrame, nome_responsavel, peso: int) -> dict:
+    """Avaliações positivas — "Bom" + "Bom com comentário"."""
+    if df_aval is None or len(df_aval) == 0 or COL_AVAL_RESP not in df_aval.columns:
+        ind = score_indicador(0, 0, peso)
+    else:
+        df = df_aval[_match_nome(df_aval[COL_AVAL_RESP], nome_responsavel)].copy()
+        tipos = df[COL_AVAL_TIPO].astype(str) if COL_AVAL_TIPO in df.columns else pd.Series(dtype=str)
+        denom = tipos[~tipos.isin(TKT_AVAL_EXC) & tipos.notna() & (tipos != "nan")]
+        ok = int(denom.isin(TKT_AVAL_POS).sum())
+        ind = score_indicador(ok, len(denom), peso)
+    ind["nome"] = "Tickets — Avaliações positivas"
+    return ind
+
+
+# ─────────────────────────────────────────────────────────────────────
+# CAIO — Octadesk
+# ─────────────────────────────────────────────────────────────────────
+
 def calc_caio_whatsapp(df_conv: pd.DataFrame) -> dict:
     """
     Caio · WhatsApp · 2 indicadores · peso 7.
     Filtro: Responsável da conversa = "Caio Rodrigues"
-
-    Indicador 1: Resposta ≤5min (peso 4) — coluna "Tempo de espera após atribuição"
-    Indicador 2: Avaliações positivas (peso 3) — "Pesquisa de satisfação", exclui Não respondeu/Não enviado
     """
-    raise NotImplementedError
+    if df_conv is None or len(df_conv) == 0:
+        return {"nota": None, "indicadores": []}
+    indicadores = _whatsapp_indicadores(df_conv, NOMES_AGENTE["caio"]["whatsapp"],
+                                         peso_resposta=4, peso_aval=3)
+    return {"nota": nota_processo(indicadores), "indicadores": indicadores}
 
 
 def calc_caio_ticket(df_tickets: pd.DataFrame, df_aval: pd.DataFrame) -> dict:
@@ -490,11 +622,14 @@ def calc_caio_ticket(df_tickets: pd.DataFrame, df_aval: pd.DataFrame) -> dict:
     Caio · Ticket · 2 indicadores · peso 7.
     Filtro: Responsável do ticket contém "Caio"
     Exclusões: Categoria=Cancelado/Spam, Status=Cancelado, Assunto=Tarefa
-
-    Indicador 1: SLA ≤4h úteis (peso 4)
-    Indicador 2: Avaliações positivas (peso 3) — "Bom" + "Bom com comentário"
     """
-    raise NotImplementedError
+    if (df_tickets is None or len(df_tickets) == 0) and (df_aval is None or len(df_aval) == 0):
+        return {"nota": None, "indicadores": []}
+    nome = NOMES_AGENTE["caio"]["ticket"]
+    df_t = _tickets_filtrados(df_tickets, nome)
+    ind1 = _ticket_sla_ind(df_t, peso=4)
+    ind2 = _ticket_aval_ind(df_aval, nome, peso=3)
+    return {"nota": nota_processo([ind1, ind2]), "indicadores": [ind1, ind2]}
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -707,9 +842,14 @@ def calc_vivianne_ticket(df_tickets: pd.DataFrame) -> dict:
     Vivianne · Ticket · 1 indicador · peso 4.
     Filtro: Responsável contém "Vivianne Fontes" ou "VIVIANNE FONTES"
     Indicador: SLA ≤4h úteis (peso 4).
-    Avaliações EXCLUÍDAS (0 registros — não entra no cálculo).
+    Avaliações EXCLUÍDAS (manual: 0 registros — não entra no cálculo).
     """
-    raise NotImplementedError
+    if df_tickets is None or len(df_tickets) == 0:
+        return {"nota": None, "indicadores": []}
+    nome = NOMES_AGENTE["vivianne"]["ticket"]
+    df_t = _tickets_filtrados(df_tickets, nome)
+    ind1 = _ticket_sla_ind(df_t, peso=4)
+    return {"nota": nota_processo([ind1]), "indicadores": [ind1]}
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -805,12 +945,25 @@ def calc_assessora_rescisao_locacao(df_resc_loc: pd.DataFrame, assessora: str,
                                     ref: Optional[datetime] = None) -> dict:
     """
     Assessora · Rescisão Loc. · 2 indicadores · peso 5.
-    4: Boleto prop <24h corrido (peso 2)
-        Início: Data do recebimento das chaves: OU fallback Última vez que saiu da fase Vistoria recebida
-        Fim: Primeira vez que entrou na fase Levant. Taxas Proporcionais
-    5: Boleto final <15d corrido (peso 3)
-        Início: chaves OU fallback Última vez que saiu da fase Agendamento de vistoria
-        Fim: Primeira vez que entrou na fase Envio do boleto final
+
+    REGRA DE INÍCIO (refinada na 11ª Ed — decisão da gestora 14/05/2026):
+        Ordem de prioridade para identificar quando a assessora assumiu o caso:
+          1ª) "Data do recebimento das chaves:" (campo COM dois-pontos, fase CHAVES RECEBIDAS)
+          2ª) "Primeira vez que entrou na fase CHAVES RECEBIDAS" (firstTimeIn)
+          3ª) Fallback antigo:
+              - Boleto prop : "Última vez que saiu da fase Vistoria recebida"
+              - Boleto final: "Última vez que saiu da fase Agendamento de vistoria"
+
+        Justificativa: o locatário pode receber a vistoria com pendências e levar
+        dias/semanas para reparar antes de entregar as chaves. Esse intervalo NÃO
+        é responsabilidade da assessora — a contagem começa quando as chaves são
+        efetivamente entregues.
+
+    Indicadores:
+      4: Boleto prop <24h corrido (peso 2)
+          Fim: Primeira vez que entrou na fase Levant. Taxas Proporcionais
+      5: Boleto final <15d corrido (peso 3)
+          Fim: Primeira vez que entrou na fase Envio do boleto final
 
     Filtro: 'Assessor (lista)' contém nome (validado contra baseline 10ª).
     """
@@ -819,11 +972,18 @@ def calc_assessora_rescisao_locacao(df_resc_loc: pd.DataFrame, assessora: str,
     nomes = _nome_assessora_alt(assessora)
     df = df[df["Assessor (lista)"].apply(lambda v: _contem_qualquer(v, nomes))].copy()
 
-    chaves = df["Data do recebimento das chaves:"]
+    chaves_campo = df["Data do recebimento das chaves:"]
+    chaves_fase = df.get("Primeira vez que entrou na fase CHAVES RECEBIDAS",
+                          pd.Series(pd.NaT, index=df.index))
     sai_vist = df["Última vez que saiu da fase Vistoria recebida"]
     sai_agend = df["Última vez que saiu da fase Agendamento de vistoria"]
-    inicio_prop = chaves.where(chaves.notna(), sai_vist)
-    inicio_final = chaves.where(chaves.notna(), sai_agend)
+
+    # 1ª prioridade: campo Data do recebimento das chaves: (com dois-pontos)
+    # 2ª prioridade: firstTimeIn da fase CHAVES RECEBIDAS
+    # 3ª prioridade: fallback específico por indicador (Vistoria recebida / Agendamento)
+    chaves_efetivas = chaves_campo.where(chaves_campo.notna(), chaves_fase)
+    inicio_prop = chaves_efetivas.where(chaves_efetivas.notna(), sai_vist)
+    inicio_final = chaves_efetivas.where(chaves_efetivas.notna(), sai_agend)
     col_lev_prop = "Primeira vez que entrou na fase Levant. Taxas Proporcionais"
     col_env_bol = "Primeira vez que entrou na fase Envio do boleto final"
 
@@ -965,17 +1125,28 @@ def calc_assessora_dirf_darf(df_dirf: pd.DataFrame, assessora: str,
 def calc_assessora_whatsapp(df_conv: pd.DataFrame, assessora: str) -> dict:
     """
     Assessora · WhatsApp · 2 indicadores · peso 7.
-    Filtro: Responsável da conversa = nome exato.
+    Filtro: Responsável da conversa = nome exato (Natália Teixeira / Gardênia).
     """
-    raise NotImplementedError
+    if df_conv is None or len(df_conv) == 0:
+        return {"nota": None, "indicadores": []}
+    nome = NOMES_AGENTE[assessora]["whatsapp"]
+    indicadores = _whatsapp_indicadores(df_conv, nome, peso_resposta=4, peso_aval=3)
+    return {"nota": nota_processo(indicadores), "indicadores": indicadores}
 
 
 def calc_assessora_ticket(df_tickets: pd.DataFrame, df_aval: pd.DataFrame, assessora: str) -> dict:
     """
     Assessora · Ticket · 2 indicadores · peso 6.
-    Filtro: Responsável do ticket contém nome.
+    Filtro: Responsável do ticket contém nome (Natália / Gardênia).
+    Exclusões: Categoria=Cancelado/Spam, Status=Cancelado, Assunto=Tarefa.
     """
-    raise NotImplementedError
+    if (df_tickets is None or len(df_tickets) == 0) and (df_aval is None or len(df_aval) == 0):
+        return {"nota": None, "indicadores": []}
+    nome = NOMES_AGENTE[assessora]["ticket"]
+    df_t = _tickets_filtrados(df_tickets, nome)
+    ind1 = _ticket_sla_ind(df_t, peso=3)
+    ind2 = _ticket_aval_ind(df_aval, nome, peso=3)
+    return {"nota": nota_processo([ind1, ind2]), "indicadores": [ind1, ind2]}
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -984,14 +1155,27 @@ def calc_assessora_ticket(df_tickets: pd.DataFrame, df_aval: pd.DataFrame, asses
 
 def calc_marinho_vistorias(df_vist: pd.DataFrame, ref: Optional[datetime] = None) -> dict:
     """
-    Marinho · Vistorias · 1 ou 2 indicadores conforme feature flag.
+    Marinho — Laudo <24h úteis
 
-    Laudo <24h úteis: Vistoria finalizada em → Última vez que saiu da fase Em produção.
-        - Peso 4 se Produtividade ativa, 10 se desativada.
-        - Negativos → 0 (✓).
-    Produtividade ≥32 m²/h (condicional — feature flag desativada na 10ª Ed):
-        - Área útil M² / horas CORRIDAS entre vistoria iniciada/finalizada.
-        - Peso 6 quando ativa.
+    Fonte: Vistoria finalizada em → Última saída fase Em produção
+    Peso: 10 (Produtividade m²/h temporariamente desativada, peso consolidado no Laudo)
+
+    NOTA SOBRE A MÉTRICA:
+    A métrica usa o tempo até o card sair da fase "Em produção" no Pipefy,
+    NÃO o tempo de entrega do laudo ao cliente. Card parado em "Em produção"
+    depois do laudo entregue conta como atraso.
+
+    REGRA DE OPERAÇÃO (decidida na 11ª Edição):
+    O Marinho deve fechar o card no Pipefy imediatamente após entregar o laudo.
+    Cards que permanecem em "Em produção" por dias após a entrega física do
+    laudo são considerados atraso operacional e contam contra a nota. A métrica
+    é educativa: força disciplina de uso do Pipefy.
+
+    REABERTURAS (re-entradas na fase "Em produção" para conferência de reparo do
+    prestador): NÃO são excluídas pela lógica. A métrica usa lastTimeOut (última
+    saída), o que naturalmente captura o ciclo completo. Caso seja necessário
+    isolar reaberturas no futuro, revisitar com base nos dados (referência:
+    scripts/diag_marinho.py).
     """
     df = excluir_rascunhos(df_vist)
     df = aplicar_cutoff(df, "Criado em", ref=ref)

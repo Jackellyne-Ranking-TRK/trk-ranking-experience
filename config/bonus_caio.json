@@ -1,0 +1,18 @@
+{
+  "_comment": "Lista de IMs validados manualmente para o bônus Caio (Imóvel alugado antes de anunciado). Critério: 1º Boleto preenchido E nenhum anúncio Caio na história (não só no recorte). Validação caso a caso pelo gestor.",
+  "_fonte_10": "painel/index_v10_original.html · const IMOVEIS.caio_bonus (rows 1451-1455)",
+  "edicao_10": [39, 123, 135, 1567],
+  "edicao_11_continuacao": [39, 123, 135],
+  "edicao_11_pendente": [],
+  "edicao_11_validados": [],
+  "edicao_11_descartados": {
+    "_validacao": "Gestora validou os 15 candidatos pendentes em 14/05/2026. Todos descartados.",
+    "por_publicacao_anterior": [
+      "11 IMs: tiveram anúncio antes do recorte de 180d (fora da janela)"
+    ],
+    "por_entrada_direta_em_ADM": [
+      "4 IMs: contrato fechado direto via ADM, sem passar pelo Comercial (não-elegível)"
+    ],
+    "lista_completa": [152, 292, 372, 373, 376, 406, 558, 640, 1782, 1801, 1802, 1826, 1831, 1836, 1841]
+  }
+}

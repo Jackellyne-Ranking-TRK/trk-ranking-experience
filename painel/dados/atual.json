@@ -1,0 +1,671 @@
+{
+  "_meta": {
+    "geradoEm": "2026-05-14T19:08:02.044836Z",
+    "ref": "2026-05-14T19:07:41.920014+00:00",
+    "octadesk_disponivel": true,
+    "imobiliar_disponivel": true
+  },
+  "PESSOAS": [
+    {
+      "id": "caio",
+      "nome": "Caio Rodrigues Lima",
+      "cargo": "Comercial",
+      "nota": 5.34,
+      "bonus": 3,
+      "bonus_proc": "Com. Locação",
+      "inds": 11,
+      "pts": 54.0,
+      "scores": {
+        "Cont. ADM": 4.0,
+        "Rescisão ADM": null,
+        "Com. Locação": 4.961,
+        "Cont. Locação": 7.286,
+        "Rescisão Loc.": null,
+        "Reparos": null,
+        "Renovação": 2.895,
+        "Inadimplência": null,
+        "Vistorias": null,
+        "BackOffice": null,
+        "DIRF/DARF": null,
+        "WhatsApp": 6.716,
+        "Ticket": 6.19
+      },
+      "detalhes": [
+        {
+          "ok": 7,
+          "tot": 41,
+          "pct": 17.1,
+          "peso": 2.5,
+          "score": 0.427,
+          "nome": "Comercial — Início processo <24h"
+        },
+        {
+          "ok": 26,
+          "tot": 66,
+          "pct": 39.4,
+          "peso": 2.5,
+          "score": 0.985,
+          "nome": "Comercial — Anúncio publicado <72h"
+        },
+        {
+          "ok": 11,
+          "tot": 27,
+          "pct": 40.7,
+          "peso": 5,
+          "score": 2.037,
+          "nome": "Comercial — Card na coluna correta"
+        },
+        {
+          "ok": 5,
+          "tot": 6,
+          "pct": 83.3,
+          "peso": 6,
+          "score": 5.0,
+          "nome": "Cont. Locação — Ocupação <30d"
+        },
+        {
+          "ok": 24,
+          "tot": 42,
+          "pct": 57.1,
+          "peso": 4,
+          "score": 2.286,
+          "nome": "Cont. Locação — Documentação <24h"
+        },
+        {
+          "ok": 2,
+          "tot": 5,
+          "pct": 40.0,
+          "peso": 10,
+          "score": 4.0,
+          "nome": "Cont. ADM — Criação→NIDO <7d"
+        },
+        {
+          "ok": 11,
+          "tot": 38,
+          "pct": 28.9,
+          "peso": 10,
+          "score": 2.895,
+          "nome": "Renovação — Avaliação >90d"
+        },
+        {
+          "ok": 1194,
+          "tot": 2396,
+          "pct": 49.8,
+          "peso": 4,
+          "score": 1.993,
+          "nome": "WhatsApp — Resposta ≤5min"
+        },
+        {
+          "ok": 139,
+          "tot": 154,
+          "pct": 90.3,
+          "peso": 3,
+          "score": 2.708,
+          "nome": "WhatsApp — Avaliações positivas"
+        },
+        {
+          "ok": 749,
+          "tot": 1738,
+          "pct": 43.1,
+          "peso": 4,
+          "score": 1.724,
+          "nome": "Tickets — SLA <4h úteis"
+        },
+        {
+          "ok": 20,
+          "tot": 23,
+          "pct": 87.0,
+          "peso": 3,
+          "score": 2.609,
+          "nome": "Tickets — Avaliações positivas"
+        }
+      ],
+      "pontosFort": [
+        "WA: 90.3%",
+        "Tkts: 87.0%",
+        "Cont.Loc: 83.3%",
+        "Cont.Loc: 57.1%"
+      ],
+      "pontosAten": [
+        "Comercial: 17.1%",
+        "Renov: 28.9%",
+        "Comercial: 39.4%",
+        "Cont.ADM: 40.0%"
+      ],
+      "pos": 1
+    },
+    {
+      "id": "vivianne",
+      "nome": "Vivianne Fontes",
+      "cargo": "BackOffice · Inadimplência",
+      "nota": 5.01,
+      "bonus": 61,
+      "bonus_proc": "Inadimplência",
+      "inds": 14,
+      "pts": 68,
+      "scores": {
+        "Cont. ADM": 4.074,
+        "Rescisão ADM": 2.0,
+        "Com. Locação": null,
+        "Cont. Locação": 5.904,
+        "Rescisão Loc.": 5.75,
+        "Reparos": null,
+        "Renovação": 2.947,
+        "Inadimplência": 9.794,
+        "Vistorias": null,
+        "BackOffice": 5.91,
+        "DIRF/DARF": null,
+        "WhatsApp": null,
+        "Ticket": 3.68
+      },
+      "detalhes": [
+        {
+          "ok": 11,
+          "tot": 27,
+          "pct": 40.7,
+          "peso": 10,
+          "score": 4.074,
+          "nome": "Cont. ADM — Confecção <2h"
+        },
+        {
+          "ok": 1,
+          "tot": 5,
+          "pct": 20.0,
+          "peso": 10,
+          "score": 2.0,
+          "nome": "Rescisão ADM — Encerramento <4h"
+        },
+        {
+          "ok": 11,
+          "tot": 34,
+          "pct": 32.4,
+          "peso": 5,
+          "score": 1.618,
+          "nome": "Cont. Locação — NIDO→Concluído <24h"
+        },
+        {
+          "ok": 36,
+          "tot": 42,
+          "pct": 85.7,
+          "peso": 5,
+          "score": 4.286,
+          "nome": "Cont. Locação — Confecção <2h"
+        },
+        {
+          "ok": 10,
+          "tot": 20,
+          "pct": 50.0,
+          "peso": 5,
+          "score": 2.5,
+          "nome": "Rescisão Loc. — Levant. Taxas Prop <2h"
+        },
+        {
+          "ok": 13,
+          "tot": 20,
+          "pct": 65.0,
+          "peso": 5,
+          "score": 3.25,
+          "nome": "Rescisão Loc. — Levant. Taxas Final <2h"
+        },
+        {
+          "ok": 11,
+          "tot": 23,
+          "pct": 47.8,
+          "peso": 5,
+          "score": 2.391,
+          "nome": "Renovação — Confecção <4h"
+        },
+        {
+          "ok": 2,
+          "tot": 18,
+          "pct": 11.1,
+          "peso": 5,
+          "score": 0.556,
+          "nome": "Renovação — Finalização <16h"
+        },
+        {
+          "ok": 240,
+          "tot": 275,
+          "pct": 87.3,
+          "peso": 2,
+          "score": 1.745,
+          "nome": "Inadimplência — Cobrança <24h"
+        },
+        {
+          "ok": 12,
+          "tot": 14,
+          "pct": 85.7,
+          "peso": 1,
+          "score": 0.857,
+          "nome": "Inadimplência — CredPago ≤15d"
+        },
+        {
+          "ok": 1,
+          "tot": 16,
+          "pct": 6.2,
+          "peso": 1,
+          "score": 0.062,
+          "nome": "Inadimplência — Negativação 7-9d"
+        },
+        {
+          "ok": 103,
+          "tot": 147,
+          "pct": 70.1,
+          "peso": 5,
+          "score": 3.503,
+          "nome": "BackOffice — Concluído <24h"
+        },
+        {
+          "ok": 13,
+          "tot": 27,
+          "pct": 48.1,
+          "peso": 5,
+          "score": 2.407,
+          "nome": "BackOffice — Troca Titularidade <5d"
+        },
+        {
+          "ok": 106,
+          "tot": 288,
+          "pct": 36.8,
+          "peso": 4,
+          "score": 1.472,
+          "nome": "Tickets — SLA <4h úteis"
+        }
+      ],
+      "pontosFort": [
+        "Inad: 87.3%",
+        "Cont.Loc: 85.7%",
+        "Inad: 85.7%",
+        "BO: 70.1%"
+      ],
+      "pontosAten": [
+        "Inad: 6.2%",
+        "Renov: 11.1%",
+        "RescADM: 20.0%",
+        "Cont.Loc: 32.4%"
+      ],
+      "pos": 2
+    },
+    {
+      "id": "gardenia",
+      "nome": "Gardênia",
+      "cargo": "Assessora",
+      "nota": 4.1,
+      "bonus": 5,
+      "bonus_proc": "Cont. ADM",
+      "inds": 15,
+      "pts": 78,
+      "scores": {
+        "Cont. ADM": 3.333,
+        "Rescisão ADM": 0.0,
+        "Com. Locação": null,
+        "Cont. Locação": null,
+        "Rescisão Loc.": 7.668,
+        "Reparos": 4.871,
+        "Renovação": 4.0,
+        "Inadimplência": null,
+        "Vistorias": null,
+        "BackOffice": 0.0,
+        "DIRF/DARF": 3.333,
+        "WhatsApp": 8.741,
+        "Ticket": 4.932
+      },
+      "detalhes": [
+        {
+          "ok": 0,
+          "tot": 12,
+          "pct": 0.0,
+          "peso": 10,
+          "score": 0.0,
+          "nome": "Cont. ADM — Conferência ≤2h"
+        },
+        {
+          "ok": 0,
+          "tot": 2,
+          "pct": 0.0,
+          "peso": 5,
+          "score": 0.0,
+          "nome": "Rescisão ADM — Repasse <12h"
+        },
+        {
+          "ok": 0,
+          "tot": 5,
+          "pct": 0.0,
+          "peso": 5,
+          "score": 0.0,
+          "nome": "Rescisão ADM — Distrato assinado"
+        },
+        {
+          "ok": 7,
+          "tot": 12,
+          "pct": 58.3,
+          "peso": 2,
+          "score": 1.167,
+          "nome": "Rescisão Loc. — Boleto prop <24h"
+        },
+        {
+          "ok": 8,
+          "tot": 9,
+          "pct": 88.9,
+          "peso": 3,
+          "score": 2.667,
+          "nome": "Rescisão Loc. — Boleto final <15d"
+        },
+        {
+          "ok": 50,
+          "tot": 72,
+          "pct": 69.4,
+          "peso": 4,
+          "score": 2.778,
+          "nome": "Reparos — Orçamento <4h"
+        },
+        {
+          "ok": 15,
+          "tot": 43,
+          "pct": 34.9,
+          "peso": 6,
+          "score": 2.093,
+          "nome": "Reparos — Pós-venda ≤7d"
+        },
+        {
+          "ok": 5,
+          "tot": 15,
+          "pct": 33.3,
+          "peso": 4,
+          "score": 1.333,
+          "nome": "Renovação — Contato >60d"
+        },
+        {
+          "ok": 4,
+          "tot": 9,
+          "pct": 44.4,
+          "peso": 6,
+          "score": 2.667,
+          "nome": "Renovação — Assinado antes vencimento"
+        },
+        {
+          "ok": 0,
+          "tot": 8,
+          "pct": 0.0,
+          "peso": 10,
+          "score": 0.0,
+          "nome": "BackOffice — Pendência <24h"
+        },
+        {
+          "ok": 2,
+          "tot": 6,
+          "pct": 33.3,
+          "peso": 10,
+          "score": 3.333,
+          "nome": "DIRF/DARF — Concluído antes 29/05"
+        },
+        {
+          "ok": 1791,
+          "tot": 2190,
+          "pct": 81.8,
+          "peso": 4,
+          "score": 3.271,
+          "nome": "WhatsApp — Resposta ≤5min"
+        },
+        {
+          "ok": 169,
+          "tot": 178,
+          "pct": 94.9,
+          "peso": 3,
+          "score": 2.848,
+          "nome": "WhatsApp — Avaliações positivas"
+        },
+        {
+          "ok": 73,
+          "tot": 202,
+          "pct": 36.1,
+          "peso": 3,
+          "score": 1.084,
+          "nome": "Tickets — SLA <4h úteis"
+        },
+        {
+          "ok": 5,
+          "tot": 8,
+          "pct": 62.5,
+          "peso": 3,
+          "score": 1.875,
+          "nome": "Tickets — Avaliações positivas"
+        }
+      ],
+      "pontosFort": [
+        "WA: 94.9%",
+        "RescLoc: 88.9%",
+        "WA: 81.8%",
+        "Reparos: 69.4%"
+      ],
+      "pontosAten": [
+        "Cont.ADM: 0.0%",
+        "RescADM: 0.0%",
+        "RescADM: 0.0%",
+        "BO: 0.0%"
+      ],
+      "pos": 3
+    },
+    {
+      "id": "natalia",
+      "nome": "Natália Teixeira",
+      "cargo": "Assessora",
+      "nota": 4.02,
+      "bonus": 5,
+      "bonus_proc": "Cont. ADM",
+      "inds": 15,
+      "pts": 78,
+      "scores": {
+        "Cont. ADM": 4.445,
+        "Rescisão ADM": 0.0,
+        "Com. Locação": null,
+        "Cont. Locação": null,
+        "Rescisão Loc.": 4.9,
+        "Reparos": 4.759,
+        "Renovação": 1.59,
+        "Inadimplência": null,
+        "Vistorias": null,
+        "BackOffice": 0.0,
+        "DIRF/DARF": 4.516,
+        "WhatsApp": 9.01,
+        "Ticket": 6.965
+      },
+      "detalhes": [
+        {
+          "ok": 2,
+          "tot": 12,
+          "pct": 16.7,
+          "peso": 10,
+          "score": 1.667,
+          "nome": "Cont. ADM — Conferência ≤2h"
+        },
+        {
+          "ok": 0,
+          "tot": 2,
+          "pct": 0.0,
+          "peso": 5,
+          "score": 0.0,
+          "nome": "Rescisão ADM — Repasse <12h"
+        },
+        {
+          "ok": 0,
+          "tot": 2,
+          "pct": 0.0,
+          "peso": 5,
+          "score": 0.0,
+          "nome": "Rescisão ADM — Distrato assinado"
+        },
+        {
+          "ok": 5,
+          "tot": 8,
+          "pct": 62.5,
+          "peso": 2,
+          "score": 1.25,
+          "nome": "Rescisão Loc. — Boleto prop <24h"
+        },
+        {
+          "ok": 2,
+          "tot": 5,
+          "pct": 40.0,
+          "peso": 3,
+          "score": 1.2,
+          "nome": "Rescisão Loc. — Boleto final <15d"
+        },
+        {
+          "ok": 38,
+          "tot": 48,
+          "pct": 79.2,
+          "peso": 4,
+          "score": 3.167,
+          "nome": "Reparos — Orçamento <4h"
+        },
+        {
+          "ok": 13,
+          "tot": 49,
+          "pct": 26.5,
+          "peso": 6,
+          "score": 1.592,
+          "nome": "Reparos — Pós-venda ≤7d"
+        },
+        {
+          "ok": 3,
+          "tot": 13,
+          "pct": 23.1,
+          "peso": 4,
+          "score": 0.923,
+          "nome": "Renovação — Contato >60d"
+        },
+        {
+          "ok": 1,
+          "tot": 9,
+          "pct": 11.1,
+          "peso": 6,
+          "score": 0.667,
+          "nome": "Renovação — Assinado antes vencimento"
+        },
+        {
+          "ok": 0,
+          "tot": 2,
+          "pct": 0.0,
+          "peso": 10,
+          "score": 0.0,
+          "nome": "BackOffice — Pendência <24h"
+        },
+        {
+          "ok": 14,
+          "tot": 31,
+          "pct": 45.2,
+          "peso": 10,
+          "score": 4.516,
+          "nome": "DIRF/DARF — Concluído antes 29/05"
+        },
+        {
+          "ok": 1805,
+          "tot": 2091,
+          "pct": 86.3,
+          "peso": 4,
+          "score": 3.453,
+          "nome": "WhatsApp — Resposta ≤5min"
+        },
+        {
+          "ok": 137,
+          "tot": 144,
+          "pct": 95.1,
+          "peso": 3,
+          "score": 2.854,
+          "nome": "WhatsApp — Avaliações positivas"
+        },
+        {
+          "ok": 169,
+          "tot": 281,
+          "pct": 60.1,
+          "peso": 3,
+          "score": 1.804,
+          "nome": "Tickets — SLA <4h úteis"
+        },
+        {
+          "ok": 19,
+          "tot": 24,
+          "pct": 79.2,
+          "peso": 3,
+          "score": 2.375,
+          "nome": "Tickets — Avaliações positivas"
+        }
+      ],
+      "pontosFort": [
+        "WA: 95.1%",
+        "WA: 86.3%",
+        "Reparos: 79.2%",
+        "Tkts: 79.2%"
+      ],
+      "pontosAten": [
+        "RescADM: 0.0%",
+        "RescADM: 0.0%",
+        "BO: 0.0%",
+        "Renov: 11.1%"
+      ],
+      "pos": 4
+    },
+    {
+      "id": "marinho",
+      "nome": "Albérico Marinho",
+      "cargo": "Vistoriador",
+      "nota": 3.91,
+      "bonus": 0,
+      "bonus_proc": null,
+      "inds": 2,
+      "pts": 20,
+      "scores": {
+        "Cont. ADM": null,
+        "Rescisão ADM": null,
+        "Com. Locação": null,
+        "Cont. Locação": null,
+        "Rescisão Loc.": null,
+        "Reparos": null,
+        "Renovação": null,
+        "Inadimplência": null,
+        "Vistorias": 3.91,
+        "BackOffice": null,
+        "DIRF/DARF": null,
+        "WhatsApp": null,
+        "Ticket": null
+      },
+      "detalhes": [
+        {
+          "ok": 28,
+          "tot": 46,
+          "pct": 60.9,
+          "peso": 10,
+          "score": 6.087,
+          "nome": "Laudos entregues ≤24h após vistoria"
+        },
+        {
+          "ok": 4,
+          "tot": 23,
+          "pct": 17.4,
+          "peso": 10,
+          "score": 1.739,
+          "nome": "Contestações respondidas <24h"
+        }
+      ],
+      "pontosFort": [
+        "Laudos entregu: 60.9%",
+        "Contestações r: 17.4%"
+      ],
+      "pontosAten": [
+        "Contestações r: 17.4%",
+        "Laudos entregu: 60.9%"
+      ],
+      "pos": 5
+    }
+  ],
+  "IMOVEIS": {},
+  "PROC_RICH": {},
+  "BASELINE_9": {
+    "caio": 5.54,
+    "vivianne": 5.26,
+    "marinho": 2.73,
+    "natalia": 3.89,
+    "gardenia": 3.91
+  }
+}
