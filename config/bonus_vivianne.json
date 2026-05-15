@@ -4,7 +4,7 @@
     "denominador_R1": 138,
     "taxa": 0.442,
     "regra_aplicada": "R1 (multa ≤15%) + R2 (card.criado ≤ data_pag) + R3 (data_pag ≤ data_repasse)",
-    "data_calculo": "2026-05-14",
+    "data_calculo": "2026-05-15",
     "antes_count": 61,
     "sem_card_count": 55,
     "reativos_count": 7,

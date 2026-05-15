@@ -1,6 +1,6 @@
 {
   "_comment": "Lista de IMs validados manualmente para o bônus Caio (Imóvel alugado antes de anunciado). Critério: 1º Boleto preenchido E nenhum anúncio Caio na história (não só no recorte). Validação caso a caso pelo gestor.",
-  "_fonte_10": "painel/index_v10_original.html · const IMOVEIS.caio_bonus (rows 1451-1455)",
+  "_fonte_10": "docs/index_v10_original.html · const IMOVEIS.caio_bonus (rows 1451-1455)",
   "edicao_10": [39, 123, 135, 1567],
   "edicao_11_continuacao": [39, 123, 135],
   "edicao_11_pendente": [],

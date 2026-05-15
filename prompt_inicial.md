@@ -28,7 +28,7 @@ Um pipeline Python que:
 2. **Calcula**: aplica as 30+ regras do `manual_v4.md` em DataFrames pandas
 3. **Valida**: compara com `baselines.json` (10ª Edição, validada)
 4. **Gera**: um `dados/atual.json` com a estrutura `PESSOAS / IMOVEIS / PROC_RICH`
-5. **O painel HTML** (também neste repo, em `painel/index.html`) lê esse JSON via fetch
+5. **O painel HTML** (também neste repo, em `docs/index.html`) lê esse JSON via fetch
 
 Depois, isso vira **5 routines do Claude Code**: snapshot diário 02h, resumo semanal segunda 08h, fechamento mensal dia 1 06h, API sob demanda, validação semanal sexta.
 
@@ -86,11 +86,11 @@ Se a nota final não bater, investigue qual indicador divergiu antes de sugerir 
 
 ### Fase 5 — Painel
 
-1. Leia o HTML da 10ª Edição (está em `painel/index_v10_original.html`).
+1. Leia o HTML da 10ª Edição (está em `docs/index_v10_original.html`).
 2. Identifique os 3 blocos `const PESSOAS`, `const IMOVEIS`, `const PROC_RICH`.
 3. Substitua os 3 blocos por um `fetch('./dados/atual.json')` no início do script.
-4. Salve como `painel/index.html`.
-5. Gere `painel/dados/atual.json` com a estrutura completa.
+4. Salve como `docs/index.html`.
+5. Gere `docs/dados/atual.json` com a estrutura completa.
 
 ### Fase 6 — Routines
 

@@ -7,7 +7,7 @@ Roda o pipeline completo:
   2. Carrega XLSX do Octadesk de dados/octadesk/ (LOCAL — quando API entrar, troca o módulo).
   3. Carrega CSVs do Imobiliar de dados/csv/ + calcula N do bônus Inadimplência (LOCAL).
   4. Calcula ranking dos 5 colaboradores via funções calc_* de calculate.py.
-  5. Gera painel/dados/atual.json no formato PESSOAS / IMOVEIS / PROC_RICH.
+  5. Gera docs/dados/atual.json no formato PESSOAS / IMOVEIS / PROC_RICH.
   6. (Opcional) `--validate` compara contra baselines.json.
 
 CLI:
@@ -52,7 +52,7 @@ from pipeline.extract_imobiliar import extract_imobiliar, calcular_bonus_inadimp
 from pipeline.imoveis_builder import gerar_imoveis
 from pipeline.procrich_builder import gerar_proc_rich, _meta_from_nome
 
-OUT_DIR = ROOT / "painel" / "dados"
+OUT_DIR = ROOT / "docs" / "dados"
 OUT_JSON = OUT_DIR / "atual.json"
 
 NOMES = {

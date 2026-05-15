@@ -14,7 +14,7 @@
   + Rescisão Loc. — campo "Data do recebimento das chaves:" como prioridade 1 (refinamento documentado)
 
 ### Média prioridade
-- [ ] **Ativar GitHub Pages** — bloqueio: renomear painel/ → docs/ via git mv. Tempo: ~10 min.
+- [x] **Ativar GitHub Pages** — CONCLUÍDO em 15/05/2026. Pasta renomeada painel/ → docs/ via `git mv`. Repo migrado para org TRK-Imoveis. Pendente apenas: ativar manualmente em Settings → Pages → Folder: /docs.
 - [ ] **Configurar routines automáticas** na nuvem Anthropic (~30 min):
   - Snapshot diário 02h
   - Resumo semanal segunda 08h

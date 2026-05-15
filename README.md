@@ -200,13 +200,13 @@ const IMOVEIS = dados.IMOVEIS;
 const PROC_RICH = dados.PROC_RICH;
 ```
 
-E vai criar a estrutura `painel/index.html` + `painel/dados/atual.json` no repo.
+E vai criar a estrutura `docs/index.html` + `docs/dados/atual.json` no repo.
 
 ### 13. Fase 5 — Publicar no GitHub Pages (10 min)
 
 1. No GitHub, vá no repositório → **Settings** → **Pages**
 2. Source: **Deploy from a branch**
-3. Branch: `main` · Folder: `/painel`
+3. Branch: `main` · Folder: `/docs`
 4. Salve.
 5. Em ~2 min, o painel vai estar em `https://SEU-USUARIO.github.io/trk-ranking-experience/`
 
